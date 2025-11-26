@@ -353,3 +353,54 @@ def classes_by_category(request, slug):
         classes_qs = FitnessClass.objects.select_related('category_fk').filter(q).distinct().order_by('name')
 
     return render(request, 'classes.html', {"classes": classes_qs, "category": display_name})
+
+
+import razorpay
+from django.conf import settings
+
+def book_class_payment(request, class_id):
+    member = get_current_member(request)
+    if not member:
+        # Redirect to signup/login, preserve 'next' so login goes back here
+        login_url = reverse('signup') + f'?next=/book/class/{class_id}/'
+        return redirect(login_url)
+
+    # Get class info (use your actual model/query)
+    gym_class = get_object_or_404(FitnessClass, pk=class_id)
+    amount = int(gym_class.price * 100)  # Razorpay expects paise
+    
+    # Razorpay Test Mode setup
+    client = razorpay.Client(auth=(settings.RAZORPAY_TEST_KEY_ID, settings.RAZORPAY_TEST_KEY_SECRET))
+    order = client.order.create(dict(amount=amount, currency='INR', payment_capture=1))
+
+    context = {
+        "order_id": order['id'],
+        "amount": amount,
+        "razorpay_key": settings.RAZORPAY_TEST_KEY_ID,
+        "class_id": class_id,
+        "gym_class": gym_class,
+        "site_member": member,
+    }
+    return render(request, "payment_page.html", context)
+
+def book_plan_payment(request, plan_id):
+    member = get_current_member(request)
+    if not member:
+        login_url = reverse('signup') + f'?next=/book/plan/{plan_id}/'
+        return redirect(login_url)
+
+    plan = get_object_or_404(Plan, pk=plan_id)
+    amount = int(plan.price * 100)
+
+    client = razorpay.Client(auth=(settings.RAZORPAY_TEST_KEY_ID, settings.RAZORPAY_TEST_KEY_SECRET))
+    order = client.order.create(dict(amount=amount, currency='INR', payment_capture=1))
+
+    context = {
+        "order_id": order['id'],
+        "amount": amount,
+        "razorpay_key": settings.RAZORPAY_TEST_KEY_ID,
+        "plan_id": plan_id,
+        "plan": plan,
+        "site_member": member,
+    }
+    return render(request, "payment_page.html", context)
