@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-6indc!29qrarjt3xb7yjualkeld2luz5+srzov@srv_rbsvih8'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["the-c-fitness-club.onrender.com"]
 
 
 # Application definition
