@@ -2,14 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Tailwind CSS (updated CDN) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <title>C-Fitness Price</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href = "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+	<title>Chinmay's website</title>
+	<link rel="stylesheet" href="style.css">
+		
 </head>
 <body class="bg-gray-900 text-gray-400">
 
@@ -64,37 +63,33 @@
                 <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-white">Pricing</h1>
                 <p class="lg:w-2/3 mx-auto leading-relaxed text-base">It's Gym Time. We are ready to fit you.</p>
             </div>
-
-            <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+              <div class="lg:w-2/3 w-full mx-auto overflow-auto">
                 <table class="table-auto w-full text-left whitespace-no-wrap">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-3 title-font tracking-wider font-medium text-white text-sm bg-gray-800 rounded-tl rounded-bl">Plan</th>
-                            <th class="px-4 py-3 title-font tracking-wider font-medium text-white text-sm bg-gray-800">Membership</th>
-                            <th class="px-4 py-3 title-font tracking-wider font-medium text-white text-sm bg-gray-800">Month</th>
-                            <th class="px-4 py-3 title-font tracking-wider font-medium text-white text-sm bg-gray-800">Price</th>
-                            <th class="w-10 title-font tracking-wider font-medium text-white text-sm bg-gray-800 rounded-tr rounded-br"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for plan in plans %}
-                        <tr>
-                            <td class="px-4 py-3 {% if not forloop.last %}border-b-2 border-gray-800{% endif %}">{{ plan.name }}</td>
-                            <td class="px-4 py-3 {% if not forloop.last %}border-b-2 border-gray-800{% endif %}">{{ plan.membership }}</td>
-                            <td class="px-4 py-3 {% if not forloop.last %}border-b-2 border-gray-800{% endif %}">{{ plan.duration }}</td>
-                            <td class="px-4 py-3 text-lg text-white {% if not forloop.last %}border-b-2 border-gray-800{% endif %}">{{ plan.price }}</td>
-                            <td class="w-10 text-center {% if not forloop.last %}border-b-2 border-gray-800{% endif %}">
-                                <input name="plan" type="radio" value="{{ plan.id }}">
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center text-gray-400 py-8">No plans found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                  <thead>...</thead>
+                  <tbody>
+                    {% for plan in plans %}
+                    <tr>
+                      <td class="px-4 py-3 {{ not forloop.last|yesno:',' }}" >{{ plan.name }}</td>
+                      <td class="px-4 py-3">{{ plan.membership }}</td>
+                      <td class="px-4 py-3">{{ plan.duration }}</td>
+                      <td class="px-4 py-3 text-lg text-white">{{ plan.price }}</td>
+                      <td class="w-10 text-center">
+                        <a href="{% url 'book_plan_payment' plan.id %}">
+                          <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                            Book
+                          </button>
+                        </a>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center text-gray-400 py-8">No plans found.</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
                 </table>
-            </div>
+              </div>
+
 
             <!-- Error Message and Booking Form -->
             <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto"></div>

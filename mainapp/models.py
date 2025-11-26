@@ -177,3 +177,22 @@ class Member(models.Model):
 
     def __str__(self):
         return self.username
+
+from django.conf import settings
+
+class UpiPayment(models.Model):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    # Either class or plan, use null=True/blank=True for flexible relation
+    fitness_class = models.ForeignKey(FitnessClass, null=True, blank=True, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, null=True, blank=True, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    upi_ref = models.CharField(max_length=100)
+    screenshot = models.ImageField(upload_to="upi_screenshots/", null=True, blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    confirmed = models.BooleanField(default=False)  # Set True manually in admin after bank/UPI check
+
+    class Meta:
+        ordering = ["-submitted_at"]
+
+    def __str__(self):
+        return f"{self.member} | {self.amount} | Verified: {self.confirmed}"

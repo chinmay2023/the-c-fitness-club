@@ -355,31 +355,43 @@ def classes_by_category(request, slug):
     return render(request, 'classes.html', {"classes": classes_qs, "category": display_name})
 
 
-import razorpay
-from django.conf import settings
-
 def book_class_payment(request, class_id):
     member = get_current_member(request)
     if not member:
-        # Redirect to signup/login, preserve 'next' so login goes back here
         login_url = reverse('signup') + f'?next=/book/class/{class_id}/'
         return redirect(login_url)
-
-    # Get class info (use your actual model/query)
     gym_class = get_object_or_404(FitnessClass, pk=class_id)
-    amount = int(gym_class.price * 100)  # Razorpay expects paise
-    
-    # Razorpay Test Mode setup
-    client = razorpay.Client(auth=(settings.RAZORPAY_TEST_KEY_ID, settings.RAZORPAY_TEST_KEY_SECRET))
-    order = client.order.create(dict(amount=amount, currency='INR', payment_capture=1))
+
+    real_upi_id = "avcbdddvd"  # Your real UPI ID
+    club_name = "C-Fitness Club"
+    upi_qr_url = generate_upi_qr(real_upi_id, str(gym_class.price), club_name, gym_class.name)
+
+    if request.method == "POST":
+        upi_ref = request.POST.get('upi_ref')
+        screenshot = request.FILES.get('screenshot')
+        # Store payment for admin review!
+        UpiPayment.objects.create(
+            member=member,
+            fitness_class=gym_class,
+            amount=gym_class.price,
+            upi_ref=upi_ref,
+            screenshot=screenshot,
+        )
+        context = {
+            "msg": "Thank you! We'll verify and confirm your booking soon.",
+            "amount": gym_class.price,
+            "class_name": gym_class.name,
+            "upi_id": real_upi_id,
+            "upi_qr_url": upi_qr_url,
+            "redirect_home": True,  # enable redirect in popup
+        }
+        return render(request, "payment_page.html", context)
 
     context = {
-        "order_id": order['id'],
-        "amount": amount,
-        "razorpay_key": settings.RAZORPAY_TEST_KEY_ID,
-        "class_id": class_id,
-        "gym_class": gym_class,
-        "site_member": member,
+        "amount": gym_class.price,
+        "class_name": gym_class.name,
+        "upi_id": real_upi_id,
+        "upi_qr_url": upi_qr_url,
     }
     return render(request, "payment_page.html", context)
 
@@ -388,19 +400,51 @@ def book_plan_payment(request, plan_id):
     if not member:
         login_url = reverse('signup') + f'?next=/book/plan/{plan_id}/'
         return redirect(login_url)
-
     plan = get_object_or_404(Plan, pk=plan_id)
-    amount = int(plan.price * 100)
 
-    client = razorpay.Client(auth=(settings.RAZORPAY_TEST_KEY_ID, settings.RAZORPAY_TEST_KEY_SECRET))
-    order = client.order.create(dict(amount=amount, currency='INR', payment_capture=1))
+    real_upi_id = "avcbdddvd"  # Your real UPI ID
+    club_name = "C-Fitness Club"
+    upi_qr_url = generate_upi_qr(real_upi_id, str(plan.price), club_name, plan.name)
+
+    if request.method == "POST":
+        upi_ref = request.POST.get('upi_ref')
+        screenshot = request.FILES.get('screenshot')
+        # Store payment for admin review!
+        UpiPayment.objects.create(
+            member=member,
+            plan=plan,
+            amount=plan.price,
+            upi_ref=upi_ref,
+            screenshot=screenshot,
+        )
+        context = {
+            "msg": "Thank you! We'll verify and confirm your membership soon.",
+            "amount": plan.price,
+            "plan_name": plan.name,
+            "upi_id": real_upi_id,
+            "upi_qr_url": upi_qr_url,
+            "redirect_home": True,  # enable redirect in popup
+        }
+        return render(request, "payment_page.html", context)
 
     context = {
-        "order_id": order['id'],
-        "amount": amount,
-        "razorpay_key": settings.RAZORPAY_TEST_KEY_ID,
-        "plan_id": plan_id,
-        "plan": plan,
-        "site_member": member,
+        "amount": plan.price,
+        "plan_name": plan.name,
+        "upi_id": real_upi_id,
+        "upi_qr_url": upi_qr_url,
     }
     return render(request, "payment_page.html", context)
+
+
+import qrcode
+from io import BytesIO
+import base64
+from .models import UpiPayment
+
+def generate_upi_qr(upi_id, amount, name, note=""):
+    upi_uri = f"upi://pay?pa={upi_id}&pn={name}&am={amount}&cu=INR&tn={note}"
+    img = qrcode.make(upi_uri)
+    buf = BytesIO()
+    img.save(buf, format='PNG')
+    img_b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+    return 'data:image/png;base64,' + img_b64

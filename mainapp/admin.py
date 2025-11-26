@@ -63,6 +63,15 @@ class FitnessClassAdmin(admin.ModelAdmin):
         return "No image uploaded."
     image_preview.short_description = "Current image"
 
+from django.contrib import admin
+from .models import UpiPayment
+
+@admin.register(UpiPayment)
+class UpiPaymentAdmin(admin.ModelAdmin):
+    list_display = ('member', 'fitness_class', 'plan', 'amount', 'upi_ref', 'confirmed', 'submitted_at')
+    list_filter = ('confirmed', 'submitted_at')
+    search_fields = ('member__username', 'upi_ref')
+
 
 # Register other models (simple registration)
 admin.site.register(Feature)

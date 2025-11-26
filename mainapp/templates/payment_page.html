@@ -1,20 +1,19 @@
-<!-- classes.html -->
- {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>C-Fitness Club | Confirm Payment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href = "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <title>C-Fitness Classes</title>
+    <!-- Tailwind CSS CDN (match with rest of project version if needed) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col">
 
-  <footer class="text-gray-400 bg-gray-900 body-font">
+   <footer class="text-gray-400 bg-gray-900 body-font">
 		<div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
 		  <a class="flex title-font font-medium items-center md:justify-start justify-center text-white">
-        <img src="https://static.vecteezy.com/system/resources/previews/017/494/085/original/letter-c-fitness-gym-logo-design-fitness-club-exercising-logo-free-vector.jpg" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-0.1 rounded-full" viewBox="0 0 24 24">
+			<img src="https://static.vecteezy.com/system/resources/previews/017/494/085/original/letter-c-fitness-gym-logo-design-fitness-club-exercising-logo-free-vector.jpg" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-0.1 rounded-full" viewBox="0 0 24 24">
 			  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
 			</svg>
 			<span class="ml-3 text-xl">The C-Fitness Club</span>
@@ -48,67 +47,76 @@
 		  </span>
 		</div>
 	  </footer>
-    
-<!-- classes.html -->
-<!-- Page heading and optional category label -->
-<section class="text-gray-400 bg-gray-900 body-font">
-  <div class="container px-5 py-16 mx-auto">
-    <div class="text-center w-full mb-12">
-      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-white">
-        {% if category %}{{ category }} Classes{% else %}All Classes{% endif %}
-      </h1>
-      <p class="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-300">
-        {% if category %}
-          Browse the {{ category }} classes we offer. Click a class to view details.
-        {% else %}
-          Explore all available classes.
-        {% endif %}
-      </p>
-    </div>
 
-    <!-- Classes grid -->
-    {% if classes %}
-    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {% for fitness_class in classes %}
-        <div class="bg-gray-800 rounded-xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition duration-300 overflow-hidden">
-          <a class="block relative rounded-t-xl overflow-hidden bg-gray-800">
-            {% if fitness_class.image_file %}
-              <img alt="{{ fitness_class.name }}" class="block w-full h-40 object-cover object-center transition-transform duration-300 ease-in-out hover:scale-105" src="{{ fitness_class.image_file.url }}">
-            {% else %}
-              <img alt="{{ fitness_class.name }}" class="block w-full h-40 object-cover object-center transition-transform duration-300 ease-in-out hover:scale-105" src="{% static 'default_class.jpg' %}">
-            {% endif %}
-          </a>
-          <div class="p-4">
-            <h3 class="text-xs text-indigo-400 tracking-widest title-font mb-1">
-              {{ fitness_class.get_category_display }}
-            </h3>
-            <h2 class="text-white title-font text-lg font-medium">{{ fitness_class.name }}</h2>
-            <p class="mt-1 font-semibold text-green-400">₹{{ fitness_class.price }}</p>
-            <div class="mt-4">
-              <a href="{% url 'book_class_payment' fitness_class.id %}" class="inline-block text-sm text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded">
-                Book
-              </a>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+    {% load static %}
+{% load static %}
 
+<!-- SUCCESS POPUP WITH BLUR -->
+<!-- SUCCESS POPUP WITH BLUR -->
+{% if msg %}
+  <div id="success-bg"
+       class="fixed inset-0 z-50 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center">
+    <div class="bg-gray-900 rounded-xl shadow-2xl max-w-xs w-full p-6 text-center border-2 border-indigo-500">
+      <h3 class="text-2xl font-bold text-green-400 mb-2">Thank You!</h3>
+      <p class="text-white mb-4">{{ msg|default:"Your payment was successful." }}</p>
+      <button onclick="window.location.href='/'" class="mt-2 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-semibold transition">
+        OK
+      </button>
     </div>
-    {% else %}
-    <!-- Empty state -->
-    <div class="max-w-2xl mx-auto mt-12 text-center">
-      <p class="text-lg text-gray-300 mb-6">No classes found in this category.</p>
-      <a href="{% url 'classes' %}" class="inline-block text-white bg-indigo-500 hover:bg-indigo-600 px-6 py-2 rounded">
-        Back to Categories
-      </a>
-    </div>
-    {% endif %}
   </div>
-</section>
+{% endif %}
+
+
+<!-- ======== MAIN CONTENT ======== -->
+<main class="flex-1 flex items-center justify-center {% if msg %}blur-sm pointer-events-none select-none{% endif %}">
+    <div class="bg-gray-800 rounded-xl shadow-lg px-8 py-10 max-w-md w-full my-12">
+        <h2 class="text-2xl font-bold text-white mb-3 text-center">
+            Complete Your Booking
+        </h2>
+        <p class="text-lg text-indigo-400 text-center mb-6 font-semibold">
+            {% if class_name %}Class: <span class="text-white">{{ class_name }}</span>{% endif %}
+            {% if plan_name %}Plan: <span class="text-white">{{ plan_name }}</span>{% endif %}
+        </p>
+        <p class="mb-1 text-center text-gray-300">Amount:</p>
+        <div class="mb-4 text-center text-2xl font-bold text-green-400">
+            ₹{{ amount }}
+        </div>
+        <hr class="my-4 border-gray-700">
+
+       <div class="mb-6 flex flex-col items-center">
+    <a href="upi://pay?pa={{ upi_id }}&am={{ amount }}&cu=INR&tn=Booking"
+       class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded block text-center font-semibold my-6">
+      Pay Now With UPI App
+    </a>
+    <div class="mb-2 text-xs text-gray-400 text-center">Tap and pay directly—no scanning needed! Works in GPay, PhonePe, Paytm, etc.</div>
+    <div class="text-center text-sm mt-2">
+        Or send to UPI ID: 
+        <span class="font-mono text-indigo-300 text-base select-all">{{ upi_id }}</span>
+    </div>
+</div>
+
+        <form method="post" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+            <label class="block font-semibold mb-2" for="upi_ref">Enter UPI Transaction/Reference Number</label>
+            <input required type="text" id="upi_ref" name="upi_ref" class="w-full px-4 py-2 rounded bg-gray-700 text-gray-100 mb-4 border border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+            <label class="block mb-2" for="screenshot">Upload Payment Screenshot (optional)</label>
+            <input type="file" name="screenshot" id="screenshot" accept="image/*" class="w-full text-gray-200 bg-gray-700 border border-gray-700 px-2 py-1 rounded mb-4">
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded transition">
+                Submit Payment Details
+            </button>
+        </form>
+        <div class="mt-4 text-yellow-300 text-center text-sm">
+            Your booking will be confirmed after we manually verify your payment.<br>
+            Need help? <span class="text-indigo-300">Contact us from the footer below.</span>
+        </div>
+    </div>
+</main>
 
 
 
-
+  
       <footer>
   <div class="bg-gray-800">
     <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row items-center">
@@ -143,6 +151,5 @@
     </div>
   </div>
 </footer>
-  
 </body>
 </html>
