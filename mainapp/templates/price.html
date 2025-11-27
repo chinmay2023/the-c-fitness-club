@@ -57,82 +57,104 @@
     </footer>
 
     <!-- Pricing Section -->
-    <section class="text-gray-400 bg-gray-900 body-font">
-        <div class="container px-5 py-10 mx-auto">
+        <section class="text-gray-400 bg-gray-900 body-font">
+        <div class="container px-5 py-24 mx-auto">
             <div class="flex flex-col text-center w-full mb-20">
-                <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-white">Pricing</h1>
-                <p class="lg:w-2/3 mx-auto leading-relaxed text-base">It's Gym Time. We are ready to fit you.</p>
+            <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-white">Pricing</h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+                Banh mi cornhole echo park skateboard authentic crucifix neutra tilde lyft biodiesel artisan direct trade mumblecore 3 wolf moon twee
+            </p>
             </div>
-              <div class="lg:w-2/3 w-full mx-auto overflow-auto">
-                <table class="table-auto w-full text-left whitespace-no-wrap">
-                  <thead>...</thead>
-                  <tbody>
-                    {% for plan in plans %}
-                    <tr>
-                      <td class="px-4 py-3 {{ not forloop.last|yesno:',' }}" >{{ plan.name }}</td>
-                      <td class="px-4 py-3">{{ plan.membership }}</td>
-                      <td class="px-4 py-3">{{ plan.duration }}</td>
-                      <td class="px-4 py-3 text-lg text-white">{{ plan.price }}</td>
-                      <td class="w-10 text-center">
-                        <a href="{% url 'book_plan_payment' plan.id %}">
-                          <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
-                            Book
-                          </button>
-                        </a>
-                      </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                      <td colspan="5" class="text-center text-gray-400 py-8">No plans found.</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
 
+            <table class="table-auto w-full text-left whitespace-no-wrap">
+            <thead>
+                <tr>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800 rounded-tl rounded-bl">
+                    Plan
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
+                    Membership
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
+                    Duration
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
+                    Price
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800 rounded-tr rounded-br">
+                    <!-- dot / radio column -->
+                </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in plans %}
+                <tr class="border-t border-gray-800">
+                <td class="px-4 py-3 text-white">{{ plan.name }}</td>
+                <td class="px-4 py-3">{{ plan.membership }}</td>
+                <td class="px-4 py-3">{{ plan.duration }}</td>
+                <td class="px-4 py-3 text-white">{{ plan.price }}</td>
+                <td class="border-t-2 border-gray-800 w-10 text-center">
+                    <input name="plan" type="radio" value="{{ plan.id }}">
+                </td>
+                </tr>
+                {% empty %}
+                <tr class="border-t border-gray-800">
+                <td colspan="5" class="text-center text-gray-400 py-8">No plans found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
 
             <!-- Error Message and Booking Form -->
             <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto"></div>
             <div id="planError" class="w-full text-center text-red-500 font-semibold mb-2" style="display:none;">
-                Please select a plan before booking.
+            Please select a plan before booking.
             </div>
 
             <form method="get" action="{% url 'book_plan' 0 %}" id="planBookForm">
-                <input type="hidden" name="plan_id" id="selectedPlanId" value="">
-                <button
-                    type="submit"
-                    class="flex mx-auto mt-10 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
-                >
-                    Book
-                </button>
+            <input type="hidden" name="plan_id" id="selectedPlanId" value="">
+            <button
+                type="submit"
+                class="flex mx-auto mt-10 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                Book
+            </button>
             </form>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const plansRadios = document.querySelectorAll('input[name="plan"]');
-                    const planBookForm = document.getElementById('planBookForm');
-                    const selectedPlanIdInput = document.getElementById('selectedPlanId');
-                    const planError = document.getElementById('planError');
+         <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const plansRadios = document.querySelectorAll('input[name="plan"]');
+    const planBookForm = document.getElementById('planBookForm');
+    const selectedPlanIdInput = document.getElementById('selectedPlanId');
+    const planError = document.getElementById('planError');
 
-                    plansRadios.forEach((radio) => {
-                        radio.addEventListener('change', () => {
-                            const planId = radio.value;
-                            selectedPlanIdInput.value = planId;
-                            planBookForm.action = `/book/${planId}/`;
-                            planError.style.display = 'none'; // Hide error on selection
-                        });
-                    });
+    if (!planBookForm || !selectedPlanIdInput || plansRadios.length === 0) {
+      return;
+    }
 
-                    planBookForm.addEventListener('submit', (e) => {
-                        if (!selectedPlanIdInput.value) {
-                            e.preventDefault();
-                            planError.style.display = 'block'; // Show the styled error
-                        }
-                    });
-                });
-            </script>
+    plansRadios.forEach((radio) => {
+      radio.addEventListener('change', () => {
+        const planId = parseInt(radio.value, 10);
+        if (!isNaN(planId)) {
+          selectedPlanIdInput.value = planId;
+          // go straight to payment gateway view
+          planBookForm.action = `/book/plan/${planId}/`;
+          planError.style.display = 'none';
+        }
+      });
+    });
+
+    planBookForm.addEventListener('submit', (e) => {
+      if (!selectedPlanIdInput.value) {
+        e.preventDefault();
+        planError.style.display = 'block';
+      }
+    });
+  });
+</script>
+
         </div>
-    </section>
+        </section>
+
 
     <!-- Stats + Bottom Footer Section -->
     <section class="text-gray-400 bg-gray-900 body-font">
