@@ -6,10 +6,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
-    # IMPORTANT FIX: include WITHOUT namespace
-    path('', include('mainapp.urls')),
+    path("", include("mainapp.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve media files (hero_image, gallery, etc.) on Render too
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
