@@ -22,7 +22,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "your-render-app-name.onrender.com",
+    "https://the-c-fitness-club.onrender.com",
 ]
 
 # APPLICATIONS
