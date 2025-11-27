@@ -49,6 +49,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "mainapp.middleware.MemberAuthMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
 ]
 
 ROOT_URLCONF = "cfitness_backend.urls"
@@ -98,7 +100,8 @@ USE_TZ = True
 # STATIC FILES
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic target on Render
+STATIC_ROOT = BASE_DIR / "staticfiles"
+  # collectstatic target on Render
 
 # MEDIA FILES (ephemeral on Render’s free tier)
 MEDIA_URL = "/media/"
