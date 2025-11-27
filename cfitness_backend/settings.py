@@ -15,7 +15,7 @@ import os
 
 SECRET_KEY = "django-insecure-6indc!29qrarjt3xb7yjualkeld2luz5+srzov@srv_rbsvih8"
 
-DEBUG = True
+DEBUG = false
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
