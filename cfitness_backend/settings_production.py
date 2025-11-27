@@ -22,8 +22,9 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "https://the-c-fitness-club.onrender.com",
+    "the-c-fitness-club.onrender.com",
 ]
+
 
 # APPLICATIONS
 INSTALLED_APPS = [
