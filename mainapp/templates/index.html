@@ -129,16 +129,17 @@
     </div>
 
     <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-      {% if hero and hero.hero_image %}
-        <img class="w-[720px] h-[600px] object-cover object-center rounded"
-             alt="hero"
-             src="{{ hero.hero_image.url }}">
-      {% else %}
-        <img class="w-[720px] h-[600px] object-cover object-center rounded"
-             alt="hero"
-             src="{% static 'images/default_hero.jpg' %}">
-      {% endif %}
-    </div>
+    {% if hero and hero.hero_image %}
+      <img class="w-[720px] h-[600px] object-cover object-center rounded"
+          alt="hero"
+          src="{{ hero.hero_image.url }}">
+    {% else %}
+      <img class="w-[720px] h-[600px] object-cover object-center rounded"
+          alt="hero"
+          src="{% static 'images/default_hero.jpg' %}">
+    {% endif %}
+  </div>
+
   </div>
 </section>
 
