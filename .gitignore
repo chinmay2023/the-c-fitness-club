@@ -28,10 +28,9 @@ config/*.env
 # Media uploads (important!)
 /media/
 /uploads/
-/staticfiles/
+/staticfiles/   # keep collected static ignored
 
-# Static files generated
-static/
+# Static build artifacts (but KEEP project static/)
 build/
 dist/
 assets/
