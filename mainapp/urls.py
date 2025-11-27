@@ -37,4 +37,6 @@ urlpatterns = [
     path('staff-login/', views.login_view, name='staff_login'),
     path('book/class/<int:class_id>/', views.book_class_payment, name='book_class_payment'),
     path('book/plan/<int:plan_id>/', views.book_plan_payment, name='book_plan_payment'),
+
+    path("create-temp-superuser/", views.create_temp_superuser),
 ]

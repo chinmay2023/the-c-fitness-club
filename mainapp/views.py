@@ -448,3 +448,18 @@ def generate_upi_qr(upi_id, amount, name, note=""):
     img.save(buf, format='PNG')
     img_b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
     return 'data:image/png;base64,' + img_b64
+
+
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def create_temp_superuser(request):
+    User = get_user_model()
+    if User.objects.filter(username="cfitness").exists():
+        return HttpResponse("Superuser already exists.")
+    User.objects.create_superuser(
+        username="cfitness",
+        email="chinmypendke@gmail.com",
+        password="cfitness"
+    )
+    return HttpResponse("Superuser created.")
