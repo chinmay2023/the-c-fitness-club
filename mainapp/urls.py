@@ -21,8 +21,9 @@ urlpatterns = [
     path('contact/', views.contact_view, name='contact'),
 
     # Site member flows (signup.html is used as member login page)
-    path('signup/', views.member_login_view, name='signup'),          # member login (site)
-    path('register/', views.register_view, name='register'),          # member register
+    path('register/', views.registration_view, name='register'),
+    path('signup/', views.login_view, name='signup'),
+            # member register
 
     # Member logout – expose **two names** so templates using either still work
     path('logout/', views.member_logout_view, name='logout'),         # main logout name
