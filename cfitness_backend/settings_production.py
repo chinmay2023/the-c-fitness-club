@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-6indc!29qrarjt3xb7yjualkeld2luz5+srzov@srv_rbsvih8",
 )
 
-DEBUG = False
+DEBUG = True
 
 # Replace this with your real Render domain, e.g. "c-fitness.onrender.com"
 ALLOWED_HOSTS = [
@@ -105,7 +105,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # MEDIA FILES (ephemeral on Render’s free tier)
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
