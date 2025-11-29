@@ -126,3 +126,9 @@ LOGGING = {
         "level": "ERROR",
     },
 }
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
