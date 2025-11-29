@@ -76,12 +76,16 @@ WSGI_APPLICATION = "cfitness_backend.wsgi.application"
 
 # DATABASE
 # For now keep SQLite; later you can switch to Postgres via env vars.
+import dj_database_url
+import os
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+    )
 }
+
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
