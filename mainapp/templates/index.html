@@ -85,7 +85,6 @@
         <div class="text-gray-300 text-sm mb-2">
           <div><b>Email:</b> {{ site_member.email }}</div>
         </div>
-        <!-- Add additional gym user info here if needed -->
         <button @click="showProfile = false" class="mt-2 w-full px-3 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-700">
           Close
         </button>
@@ -149,25 +148,31 @@
                    alt="hero"
                    src="{{ hero.hero_image.url }}">
             </div>
-          {% else %}
+          {% endif %}
+
+          {% if hero and hero.hero_image_2 %}
             <div class="swiper-slide">
               <img class="w-[720px] h-[600px] object-cover object-center"
-                   alt="hero"
-                   src="{% static 'images/default_hero.jpg' %}">
+                   alt="hero-2"
+                   src="{{ hero.hero_image_2.url }}">
             </div>
           {% endif %}
 
-          <!-- Extra static slides (optional) -->
-          <div class="swiper-slide">
-            <img class="w-[720px] h-[600px] object-cover object-center"
-                 alt="hero-2"
-                 src="{% static 'images/hero_slide_2.jpg' %}">
-          </div>
-          <div class="swiper-slide">
-            <img class="w-[720px] h-[600px] object-cover object-center"
-                 alt="hero-3"
-                 src="{% static 'images/hero_slide_3.jpg' %}">
-          </div>
+          {% if hero and hero.hero_image_3 %}
+            <div class="swiper-slide">
+              <img class="w-[720px] h-[600px] object-cover object-center"
+                   alt="hero-3"
+                   src="{{ hero.hero_image_3.url }}">
+            </div>
+          {% endif %}
+
+          {% if not hero or not hero.hero_image %}
+            <div class="swiper-slide">
+              <img class="w-[720px] h-[600px] object-cover object-center"
+                   alt="hero-default"
+                   src="{% static 'images/default_hero.jpg' %}">
+            </div>
+          {% endif %}
         </div>
 
         <!-- Only pagination dots -->
@@ -248,7 +253,6 @@
     </a>
     <p class="text-sm text-gray-400 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-800 sm:py-2 sm:mt-0 mt-4">© The C-Fitness Club —
       <a href="https://twitter.com/Chins71562758" class="text-gray-500 ml-1" target="_blank" rel="noopener noreferrer">Chinmay Pendke</a>
-      
     </p>
     <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
       <a class="text-gray-400">
