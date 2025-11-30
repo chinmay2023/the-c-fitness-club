@@ -5,13 +5,15 @@ from django.utils.text import slugify
 
 
 class HeroSection(models.Model):
-    # Added title & subtitle because views/templates expect them
     title = models.CharField(max_length=200, blank=True, default="Welcome to Our Gym")
     subtitle = models.CharField(max_length=300, blank=True, default="Your Fitness Journey Starts Here")
-    hero_image = models.ImageField(upload_to="upload/", null=True, blank=True)
+    hero_image = models.ImageField(upload_to="upload/", null=True, blank=True)   # main
+    hero_image_2 = models.ImageField(upload_to="upload/", null=True, blank=True)
+    hero_image_3 = models.ImageField(upload_to="upload/", null=True, blank=True)
 
     def __str__(self):
         return self.title or "Hero Section"
+
 
 
 class Category(models.Model):
