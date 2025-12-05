@@ -458,10 +458,17 @@ def book_plan_payment(request, plan_id):
 
     plan = get_object_or_404(Plan, pk=plan_id)
 
+    # Remove commas from the string price, e.g. "12,999" -> "12999"
+    raw_price = str(plan.price)
+    upi_amount = raw_price.replace(",", "")
+
     real_upi_id = "7774999781@ibl"  # Your real UPI ID
     club_name = "C-Fitness Club"
     upi_qr_url = generate_upi_qr(
-        real_upi_id, str(plan.price), club_name, plan.name
+        real_upi_id,
+        upi_amount,   # use value WITHOUT commas
+        club_name,
+        plan.name,
     )
 
     if request.method == "POST":
@@ -470,19 +477,28 @@ def book_plan_payment(request, plan_id):
         UpiPayment.objects.create(
             member=member,
             plan=plan,
-            amount=plan.price,
+            amount=upi_amount,  # or convert to Decimal if you want
             upi_ref=upi_ref,
             screenshot=screenshot,
         )
         context = {
             "msg": "Thank you! We'll verify and confirm your membership soon.",
-            "amount": plan.price,
+            "amount": upi_amount,
             "plan_name": plan.name,
-            "upi_id": "7774999781@ibl",
+            "upi_id": real_upi_id,
             "upi_qr_url": upi_qr_url,
             "redirect_home": True,
         }
         return render(request, "payment_page.html", context)
+
+    context = {
+        "amount": upi_amount,
+        "plan_name": plan.name,
+        "upi_id": real_upi_id,
+        "upi_qr_url": upi_qr_url,
+    }
+    return render(request, "payment_page.html", context)
+
 
     context = {
         "amount": plan.price,
