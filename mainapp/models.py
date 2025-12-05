@@ -57,7 +57,7 @@ class FitnessClass(models.Model):
         related_name="classes"
     )
     price = models.DecimalField(max_digits=7, decimal_places=2)
-    image_file = models.ImageField(upload_to="fitness_class/", blank=True, null=True)
+    image_file = models.ImageField(upload_to="fitnessclass/", blank=True, null=True)
 
     class Meta:
         ordering = ["name"]
