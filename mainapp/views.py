@@ -128,18 +128,35 @@ def gallery_view(request):
     return render(request, "gallery.html", {"images": images})
 
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 def contact_view(request):
     if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(
-                request, "Your message was submitted. We'll get back to you soon."
-            )
-            return redirect("contact")
-    else:
-        form = ContactForm()
-    return render(request, "contact.html", {"form": form})
+        user_email = request.POST.get("email")
+        message = request.POST.get("message")
+
+        # 1) Send mail to YOU (site owner)
+        send_mail(
+            subject="New contact message from C-Fitness site",
+            message=f"From: {user_email}\n\nMessage:\n{message}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.CONTACT_RECEIVER_EMAIL],  # see below
+            fail_silently=False,
+        )
+
+        # 2) Send auto-reply to USER
+        send_mail(
+            subject="Thanks for contacting C-Fitness Club",
+            message="We received your message and will reply soon.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user_email],
+            fail_silently=False,
+        )
+
+        return redirect("contact")
+
+    return render(request, "contact.html")
 
 
 def equipment_view(request):

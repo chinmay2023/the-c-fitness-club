@@ -136,3 +136,5 @@ STORAGES = {
     },
 }
 
+CONTACT_RECEIVER_EMAIL = "your_admin_email@example.com"
+

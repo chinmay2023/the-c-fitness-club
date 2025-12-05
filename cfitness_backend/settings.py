@@ -110,3 +110,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CONTACT_RECEIVER_EMAIL = "your_admin_email@example.com"
