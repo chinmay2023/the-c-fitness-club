@@ -2,13 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href = "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-	<title>Chinmay's website</title>
-	<link rel="stylesheet" href="style.css">
-		
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Chinmay's website</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gray-900 text-gray-400">
 
@@ -57,104 +56,105 @@
     </footer>
 
     <!-- Pricing Section -->
-        <section class="text-gray-400 bg-gray-900 body-font">
-        <div class="container px-5 py-24 mx-auto">
-            <div class="flex flex-col text-center w-full mb-20">
-            <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-white">Pricing</h1>
-            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
-                Flexible monthly plans for gym, weight training, yoga and Zumba to fit every goal and budget.
-            </p>
+    <section class="text-gray-400 bg-gray-900 body-font">
+        <div class="container px-4 sm:px-5 py-16 sm:py-24 mx-auto">
+            <div class="flex flex-col text-center w-full mb-12 sm:mb-20">
+                <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-white">Pricing</h1>
+                <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+                    Flexible monthly plans for gym, weight training, yoga and Zumba to fit every goal and budget.
+                </p>
             </div>
 
-            <table class="table-auto w-full text-left whitespace-no-wrap">
-            <thead>
-                <tr>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800 rounded-tl rounded-bl">
-                    Plan
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
-                    Membership
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
-                    Duration
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
-                    Price
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800 rounded-tr rounded-br">
-                    <!-- dot / radio column -->
-                </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for plan in plans %}
-                <tr class="border-t border-gray-800">
-                <td class="px-4 py-3 text-white">{{ plan.name }}</td>
-                <td class="px-4 py-3">{{ plan.membership }}</td>
-                <td class="px-4 py-3">{{ plan.duration }}</td>
-                <td class="px-4 py-3 text-white">{{ plan.price }}</td>
-                <td class="border-t-2 border-gray-800 w-10 text-center">
-                    <input name="plan" type="radio" value="{{ plan.id }}">
-                </td>
-                </tr>
-                {% empty %}
-                <tr class="border-t border-gray-800">
-                <td colspan="5" class="text-center text-gray-400 py-8">No plans found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            </table>
+            <!-- Responsive table wrapper -->
+            <div class="w-full overflow-x-auto">
+                <table class="table-auto min-w-full text-left whitespace-no-wrap text-sm">
+                    <thead>
+                        <tr>
+                            <th class="px-2 sm:px-4 py-2 sm:py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800 rounded-tl rounded-bl">
+                                Plan
+                            </th>
+                            <th class="px-2 sm:px-4 py-2 sm:py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
+                                Membership
+                            </th>
+                            <th class="px-2 sm:px-4 py-2 sm:py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
+                                Duration
+                            </th>
+                            <th class="px-2 sm:px-4 py-2 sm:py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800">
+                                Price
+                            </th>
+                            <th class="px-2 sm:px-4 py-2 sm:py-3 title-font tracking-wider font-medium text-sm text-gray-400 bg-gray-800 rounded-tr rounded-br">
+                                <!-- dot / radio column -->
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for plan in plans %}
+                        <tr class="border-t border-gray-800">
+                            <td class="px-2 sm:px-4 py-2 sm:py-3 text-white">{{ plan.name }}</td>
+                            <td class="px-2 sm:px-4 py-2 sm:py-3">{{ plan.membership }}</td>
+                            <td class="px-2 sm:px-4 py-2 sm:py-3">{{ plan.duration }}</td>
+                            <td class="px-2 sm:px-4 py-2 sm:py-3 text-white">{{ plan.price }}</td>
+                            <td class="border-t-2 border-gray-800 w-10 text-center">
+                                <input name="plan" type="radio" value="{{ plan.id }}">
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="border-t border-gray-800">
+                            <td colspan="5" class="text-center text-gray-400 py-8">No plans found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Error Message and Booking Form -->
             <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto"></div>
             <div id="planError" class="w-full text-center text-red-500 font-semibold mb-2" style="display:none;">
-            Please select a plan before booking.
+                Please select a plan before booking.
             </div>
 
             <form method="get" action="{% url 'book_plan' 0 %}" id="planBookForm">
-            <input type="hidden" name="plan_id" id="selectedPlanId" value="">
-            <button
-                type="submit"
-                class="flex mx-auto mt-10 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                Book
-            </button>
+                <input type="hidden" name="plan_id" id="selectedPlanId" value="">
+                <button
+                    type="submit"
+                    class="w-full sm:w-auto flex justify-center mx-auto mt-8 sm:mt-10 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    Book
+                </button>
             </form>
 
-         <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const plansRadios = document.querySelectorAll('input[name="plan"]');
-    const planBookForm = document.getElementById('planBookForm');
-    const selectedPlanIdInput = document.getElementById('selectedPlanId');
-    const planError = document.getElementById('planError');
+            <script>
+              document.addEventListener('DOMContentLoaded', () => {
+                const plansRadios = document.querySelectorAll('input[name="plan"]');
+                const planBookForm = document.getElementById('planBookForm');
+                const selectedPlanIdInput = document.getElementById('selectedPlanId');
+                const planError = document.getElementById('planError');
 
-    if (!planBookForm || !selectedPlanIdInput || plansRadios.length === 0) {
-      return;
-    }
+                if (!planBookForm || !selectedPlanIdInput || plansRadios.length === 0) {
+                  return;
+                }
 
-    plansRadios.forEach((radio) => {
-      radio.addEventListener('change', () => {
-        const planId = parseInt(radio.value, 10);
-        if (!isNaN(planId)) {
-          selectedPlanIdInput.value = planId;
-          // go straight to payment gateway view
-          planBookForm.action = `/book/plan/${planId}/`;
-          planError.style.display = 'none';
-        }
-      });
-    });
+                plansRadios.forEach((radio) => {
+                  radio.addEventListener('change', () => {
+                    const planId = parseInt(radio.value, 10);
+                    if (!isNaN(planId)) {
+                      selectedPlanIdInput.value = planId;
+                      planBookForm.action = `/book/plan/${planId}/`;
+                      planError.style.display = 'none';
+                    }
+                  });
+                });
 
-    planBookForm.addEventListener('submit', (e) => {
-      if (!selectedPlanIdInput.value) {
-        e.preventDefault();
-        planError.style.display = 'block';
-      }
-    });
-  });
-</script>
+                planBookForm.addEventListener('submit', (e) => {
+                  if (!selectedPlanIdInput.value) {
+                    e.preventDefault();
+                    planError.style.display = 'block';
+                  }
+                });
+              });
+            </script>
 
         </div>
-        </section>
-
+    </section>
 
     <!-- Stats + Bottom Footer Section -->
     <section class="text-gray-400 bg-gray-900 body-font">
