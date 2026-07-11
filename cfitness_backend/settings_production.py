@@ -21,9 +21,10 @@ DEBUG = True
 
 # Replace this with your real Render domain, e.g. "c-fitness.onrender.com"
 ALLOWED_HOSTS = [
-    "127.0.0.1",
+    "the-c-fitness-club-habz.onrender.com",
+    ".onrender.com",  # Allows any subdomains on Render just in case
     "localhost",
-    "the-c-fitness-club.onrender.com",
+    "127.0.0.1",
 ]
 
 
