@@ -29,16 +29,17 @@ ALLOWED_HOSTS = [
 
 
 
-# APPLICATIONS
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "cloudinary_storage",  # <-- Move this here (above staticfiles)
     "django.contrib.staticfiles",
     "mainapp",
     "rest_framework",
+    "cloudinary",          # <-- This one is fine staying at the bottom
 ]
 
 MIDDLEWARE = [
