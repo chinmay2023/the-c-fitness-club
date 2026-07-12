@@ -112,6 +112,8 @@ STORAGES = {
     },
 }
 
+WHITENOISE_MANIFEST_STRICT = False
+
 # Legacy fallback string to keep django-cloudinary-storage from throwing an AttributeError
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
