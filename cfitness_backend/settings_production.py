@@ -3,23 +3,22 @@ Production settings for cfitness_backend project.
 
 cfitness_backend/settings_production.py
 """
-#cfitness_backend/settings_production.py
 from pathlib import Path
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # SECURITY
 # Use an environment variable in Render dashboard for the real secret key
 SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY",
+    "SECRET_KEY",  # Matches the exact key name in your Render environment setup
     "django-insecure-6indc!29qrarjt3xb7yjualkeld2luz5+srzov@srv_rbsvih8",
 )
 
-DEBUG = True
+# Set to False for production!
+DEBUG = False
 
-# Replace this with your real Render domain, e.g. "c-fitness.onrender.com"
 ALLOWED_HOSTS = [
     "the-c-fitness-club-habz.onrender.com",
     ".onrender.com",  # Allows any subdomains on Render just in case
@@ -27,23 +26,22 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
-
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "cloudinary_storage",  # <-- Move this here (above staticfiles)
+    "cloudinary_storage",  # Positioned above staticfiles to intercept media uploads
     "django.contrib.staticfiles",
     "mainapp",
     "rest_framework",
-    "cloudinary",          # <-- This one is fine staying at the bottom
+    "cloudinary",          
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Moved right below SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -51,8 +49,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "mainapp.middleware.MemberAuthMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  
-
 ]
 
 ROOT_URLCONF = "cfitness_backend.urls"
@@ -77,17 +73,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "cfitness_backend.wsgi.application"
 
 # DATABASE
-# For now keep SQLite; later you can switch to Postgres via env vars.
-import dj_database_url
-import os
-
 DATABASES = {
     "default": dj_database_url.config(
         default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
     )
 }
-
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
@@ -103,15 +94,26 @@ TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES
+# STATIC & MEDIA FILES CONFIGURATION
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-  # collectstatic target on Render
 
-# MEDIA FILES (ephemeral on Render’s free tier)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Modern Django 5.2+ Storages Engine
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Legacy fallback string to keep django-cloudinary-storage from throwing an AttributeError
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -129,14 +131,4 @@ LOGGING = {
     },
 }
 
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
 CONTACT_RECEIVER_EMAIL = "your_admin_email@example.com"
-
