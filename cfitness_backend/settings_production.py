@@ -108,14 +108,14 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # Changed Manifest to standard Compressed backend to prevent Cloudinary file checking crashes
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage", 
     },
 }
-
 WHITENOISE_MANIFEST_STRICT = False
 
 # Legacy fallback string to keep django-cloudinary-storage from throwing an AttributeError
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
