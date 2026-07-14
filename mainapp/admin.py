@@ -1,4 +1,3 @@
-# mainapp/admin.py
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
@@ -13,8 +12,8 @@ from .models import (
     Member,
     HeroSection,
     ContactInquiry,
+    UpiPayment,
 )
-
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -63,8 +62,6 @@ class FitnessClassAdmin(admin.ModelAdmin):
         return "No image uploaded."
     image_preview.short_description = "Current image"
 
-from django.contrib import admin
-from .models import UpiPayment
 
 @admin.register(UpiPayment)
 class UpiPaymentAdmin(admin.ModelAdmin):
@@ -73,7 +70,21 @@ class UpiPaymentAdmin(admin.ModelAdmin):
     search_fields = ('member__username', 'upi_ref')
 
 
-# Register other models (simple registration)
+@admin.register(ContactInquiry)
+class ContactInquiryAdmin(admin.ModelAdmin):
+    list_display = ('email', 'submitted_at', 'message_snippet')
+    list_filter = ('submitted_at',)
+    search_fields = ('email', 'message')
+    readonly_fields = ('email', 'message', 'submitted_at')
+
+    def message_snippet(self, obj):
+        if obj.message and len(obj.message) > 50:
+            return f"{obj.message[:50]}..."
+        return obj.message or ""
+    message_snippet.short_description = 'Message Preview'
+
+
+# Register remaining models (simple registration)
 admin.site.register(Feature)
 admin.site.register(GalleryImage)
 admin.site.register(EquipmentCategory)
@@ -82,4 +93,3 @@ admin.site.register(Plan)
 admin.site.register(Testimonial)
 admin.site.register(Member)
 admin.site.register(HeroSection)
-admin.site.register(ContactInquiry)

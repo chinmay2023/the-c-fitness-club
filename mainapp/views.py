@@ -130,29 +130,45 @@ def gallery_view(request):
 
 from django.core.mail import send_mail
 from django.conf import settings
+from .models import ContactInquiry  # Ensure ContactInquiry is imported here!
 
 def contact_view(request):
     if request.method == "POST":
         user_email = request.POST.get("email")
         message = request.POST.get("message")
 
-        # 1) Send mail to YOU (site owner)
-        send_mail(
-            subject="New contact message from C-Fitness site",
-            message=f"From: {user_email}\n\nMessage:\n{message}",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.CONTACT_RECEIVER_EMAIL],  # see below
-            fail_silently=False,
-        )
+        # 1) Save to database so it populates the Administration site block
+        try:
+            ContactInquiry.objects.create(
+                email=user_email,
+                message=message
+            )
+        except Exception as e:
+            print(f"Database save issue: {e}")
 
-        # 2) Send auto-reply to USER
-        send_mail(
-            subject="Thanks for contacting C-Fitness Club",
-            message="We received your message and will reply soon.",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user_email],
-            fail_silently=False,
-        )
+        # 2) Send notification email safely (skips 500 error if email services aren't initialized)
+        try:
+            send_mail(
+                subject="New contact message from C-Fitness site",
+                message=f"From: {user_email}\n\nMessage:\n{message}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[getattr(settings, 'CONTACT_RECEIVER_EMAIL', 'admin@example.com')],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
+
+        # 3) Send verification auto-reply to user safely
+        try:
+            send_mail(
+                subject="Thanks for contacting C-Fitness Club",
+                message="We received your message and will reply soon.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user_email],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
 
         return redirect("contact")
 
