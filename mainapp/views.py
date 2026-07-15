@@ -1,4 +1,3 @@
-# mainapp/views.py
 """
 Corrected views for mainapp.
 
@@ -24,9 +23,9 @@ from django.contrib.auth import get_user_model
 
 from .models import (
     HeroSection, FitnessClass, GalleryImage, EquipmentCategory,
-    Feature, Plan, Testimonial, Member, Category, UpiPayment
+    Feature, Plan, Testimonial, Member, Category, UpiPayment, ContactInquiry
 )
-from .forms import ContactForm, MemberRegistrationForm
+from .forms import ContactForm, MemberRegistrationForm, TestimonialForm
 
 import qrcode
 from io import BytesIO
@@ -130,7 +129,6 @@ def gallery_view(request):
 
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import ContactInquiry  # Ensure ContactInquiry is imported here!
 
 def contact_view(request):
     if request.method == "POST":
@@ -191,8 +189,20 @@ def plans_view(request):
 
 
 def testimonial_view(request):
+    if request.method == "POST":
+        form = TestimonialForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("testimonial")
+    else:
+        form = TestimonialForm()
+
     testimonials = Testimonial.objects.all()
-    return render(request, "testimonial.html", {"testimonials": testimonials})
+    return render(
+        request, 
+        "testimonial.html", 
+        {"testimonials": testimonials, "form": form}
+    )
 
 
 # -------------------------------------------------------------------
@@ -511,15 +521,6 @@ def book_plan_payment(request, plan_id):
         "amount": upi_amount,
         "plan_name": plan.name,
         "upi_id": real_upi_id,
-        "upi_qr_url": upi_qr_url,
-    }
-    return render(request, "payment_page.html", context)
-
-
-    context = {
-        "amount": plan.price,
-        "plan_name": plan.name,
-        "upi_id": "7774999781@ibl",
         "upi_qr_url": upi_qr_url,
     }
     return render(request, "payment_page.html", context)

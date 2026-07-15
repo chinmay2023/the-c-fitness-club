@@ -1,6 +1,5 @@
-# mainapp/forms.py
 from django import forms
-from .models import ContactInquiry, Member
+from .models import ContactInquiry, Member, Testimonial
 
 
 class MemberRegistrationForm(forms.ModelForm):
@@ -61,7 +60,6 @@ class MemberRegistrationForm(forms.ModelForm):
     def clean_email(self):
         email = (self.cleaned_data.get('email') or '').strip().lower()
         qs = Member.objects.filter(email__iexact=email)
-        # exclude current instance when editing (safe for both create and update)
         if self.instance and self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
         if qs.exists():
@@ -71,7 +69,6 @@ class MemberRegistrationForm(forms.ModelForm):
     def clean_username(self):
         username = (self.cleaned_data.get('username') or '').strip()
         qs = Member.objects.filter(username__iexact=username)
-        # exclude current instance when editing
         if self.instance and self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
         if qs.exists():
@@ -87,10 +84,7 @@ class MemberRegistrationForm(forms.ModelForm):
         return cleaned
 
     def save(self, commit=True):
-        # don't call super().save(commit=True) yet — assign normalized values first
         member = super().save(commit=False)
-
-        # normalize and set essential fields
         email = (self.cleaned_data.get('email') or '').strip().lower()
         username = (self.cleaned_data.get('username') or '').strip()
         full_name = (self.cleaned_data.get('full_name') or '').strip()
@@ -101,7 +95,7 @@ class MemberRegistrationForm(forms.ModelForm):
 
         raw_password = self.cleaned_data.get('password1')
         if raw_password:
-            member.set_password(raw_password)  # uses your Member.set_password (hashes)
+            member.set_password(raw_password)
 
         if commit:
             member.save()
@@ -122,4 +116,32 @@ class ContactForm(forms.ModelForm):
                 'rows': 4,
                 'placeholder': 'Your message'
             })
+        }
+
+
+class TestimonialForm(forms.ModelForm):
+    class Meta:
+        model = Testimonial
+        fields = ['name', 'role', 'review', 'profile_photo']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'style': 'width: 100%; color: #fff; padding: 0.75rem 1rem; background-color: #141923; border: 1px solid #2d3748; border-radius: 0.375rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; font-size: 0.95rem;',
+                'placeholder': 'Your Full Name',
+                'onfocus': "this.style.borderColor='#5c6bc0'; this.style.boxShadow='0 0 0 3px rgba(92, 107, 192, 0.25)';",
+                'onblur': "this.style.borderColor='#2d3748'; this.style.boxShadow='none';"
+            }),
+            'role': forms.TextInput(attrs={
+                'style': 'width: 100%; color: #fff; padding: 0.75rem 1rem; background-color: #141923; border: 1px solid #2d3748; border-radius: 0.375rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; font-size: 0.95rem;',
+                'placeholder': 'e.g., Software Engineer, Student',
+                'onfocus': "this.style.borderColor='#5c6bc0'; this.style.boxShadow='0 0 0 3px rgba(92, 107, 192, 0.25)';",
+                'onblur': "this.style.borderColor='#2d3748'; this.style.boxShadow='none';"
+            }),
+            'review': forms.Textarea(attrs={
+                'style': 'width: 100%; color: #fff; padding: 0.75rem 1rem; background-color: #141923; border: 1px solid #2d3748; border-radius: 0.375rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; font-size: 0.95rem; resize: none;',
+                'rows': 4,
+                'placeholder': 'Describe your gym progression...',
+                'onfocus': "this.style.borderColor='#5c6bc0'; this.style.boxShadow='0 0 0 3px rgba(92, 107, 192, 0.25)';",
+                'onblur': "this.style.borderColor='#2d3748'; this.style.boxShadow='none';"
+            }),
+            'profile_photo': forms.ClearableFileInput()
         }
